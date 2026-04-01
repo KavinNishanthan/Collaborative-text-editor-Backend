@@ -8,10 +8,14 @@ import cors from 'cors';
 // Importing Configs
 import mongooseConnect from './configs/mongoose.config';
 
+//Importing Routs
+import routes from './routes/index';
+
 const port = process.env.PORT;
 const app: Express = express();
 
 mongooseConnect();
+
 
 app.use(
   cors({
@@ -20,9 +24,13 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => {
-  res.send('Server is Running Successfully');
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// app.get('/', (req, res) => {
+//   res.send('Server is Running Successfully');
+// });
+
+app.use('/api', routes);
 
 app.listen(port, () => {
   console.log(

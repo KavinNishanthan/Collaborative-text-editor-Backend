@@ -16,7 +16,6 @@
     "exactOptionalPropertyTypes": true,
 
     "strict": true,
-    "isolatedModules": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
     "esModuleInterop": true,
