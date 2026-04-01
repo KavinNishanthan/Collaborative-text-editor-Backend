@@ -1,0 +1,53 @@
+{
+  "name": "collaborative-text-editor-backend",
+  "version": "1.0.0",
+  "description": "A real-time collaborative text editor where multiple users can edit the same document simultaneously (Backend).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KavinNishanthan/Collaborative-text-editor-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/KavinNishanthan/Collaborative-text-editor-Backend/issues"
+  },
+  "homepage": "https://github.com/KavinNishanthan/Collaborative-text-editor-Backend#readme",
+  "dependencies": {
+    "axios": "^1.14.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "joi": "^18.1.2",
+    "jsonwebtoken": "^9.0.3",
+    "lib0": "^0.2.117",
+    "mongoose": "^9.3.3",
+    "path": "^0.12.7",
+    "socket.io": "^4.8.3",
+    "uuid": "^13.0.0",
+    "y-protocols": "^1.0.7",
+    "yjs": "^13.6.30"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.5.0",
+    "@types/uuid": "^10.0.0",
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.14",
+    "typescript": "^6.0.2"
+  }
+}
