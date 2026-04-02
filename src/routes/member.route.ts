@@ -14,5 +14,8 @@ router.use(authMiddleware);
 
 // Routes for document member management
 router.post('/:documentId/members/invite', memberController.handleInviteMember);
+router.get('/:documentId/members', memberController.handleGetAllMembers);
+router.put('/:documentId/members/:memberId', memberController.handleUpdateMemberRole);
+router.delete('/:documentId/members/:memberId', memberController.handleRemoveMember);
 
 export default router;
