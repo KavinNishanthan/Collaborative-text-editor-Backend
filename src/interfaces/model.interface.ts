@@ -55,5 +55,14 @@ interface IOtp {
   createdAt?: Date;
 }
 
+interface IActivityLog {
+  logId: string;
+  documentId: string;
+  userId: string;
+  action: 'joined' | 'left' | 'edited' | 'commented' | 'restored' | 'invited' | 'removed';
+  metadata?: string;
+  timestamp?: Date;
+}
 
-export {IUser, IDocument, IDocumentMember, IDocumentHistory, IOtp}
+
+export { IUser, IDocument, IDocumentMember, IDocumentHistory, IOtp, IActivityLog };

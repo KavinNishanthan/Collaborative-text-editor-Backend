@@ -11,6 +11,7 @@ const axios_1 = require("axios");
 const otp_helper_1 = require("../helpers/otp.helper");
 const mail_helper_1 = require("../helpers/mail.helper");
 const uuid_helper_1 = require("../helpers/uuid.helper");
+const cookie_helper_1 = require("../helpers/cookie.helper");
 const profile_colour_helper_1 = require("../helpers/profile-colour.helper");
 // Importing models
 const otp_model_1 = __importDefault(require("../models/otp.model"));
@@ -18,7 +19,6 @@ const user_model_1 = __importDefault(require("../models/user.model"));
 // Importing constants
 const http_message_constant_1 = __importDefault(require("../constants/http-message.constant"));
 const response_message_constant_1 = __importDefault(require("../constants/response-message.constant"));
-const cookie_helper_1 = require("../helpers/cookie.helper");
 /**
  * @createdBy Kavin Nishanthan P D
  * @createdAt 2026-04-01
@@ -165,7 +165,7 @@ const handleVerifyOtpAndRegister = async (req, res) => {
 };
 /**
  * @createdBy Kavin Nishanthan P D
- * @createdAt 2026-04-02
+ * @createdAt 2026-04-01
  * @description This function is used to handle user login
  */
 const handleLogin = async (req, res) => {

@@ -13,10 +13,12 @@ interface IUser {
     updatedAt?: Date;
 }
 interface IDocument {
-    documentId?: string;
-    title?: string;
-    content?: string;
-    ownerId?: string;
+    documentId: string;
+    title: string;
+    content: string;
+    yjsState?: Buffer;
+    ownerId: string;
+    shareToken?: string;
     lastEditedBy?: string;
     lastEditedAt?: Date;
     createdAt?: Date;
@@ -48,5 +50,13 @@ interface IOtp {
     expiresAt?: Date;
     createdAt?: Date;
 }
-export { IUser, IDocument, IDocumentMember, IDocumentHistory, IOtp };
+interface IActivityLog {
+    logId: string;
+    documentId: string;
+    userId: string;
+    action: 'joined' | 'left' | 'edited' | 'commented' | 'restored' | 'invited' | 'removed';
+    metadata?: string;
+    timestamp?: Date;
+}
+export { IUser, IDocument, IDocumentMember, IDocumentHistory, IOtp, IActivityLog };
 //# sourceMappingURL=model.interface.d.ts.map

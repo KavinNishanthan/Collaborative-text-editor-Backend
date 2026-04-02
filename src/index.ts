@@ -19,6 +19,7 @@ mongooseConnect();
 
 app.use(
   cors({
+    origin: ['http://localhost:5173'],
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
     credentials: true
   })
@@ -26,6 +27,7 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 // app.get('/', (req, res) => {
 //   res.send('Server is Running Successfully');
 // });

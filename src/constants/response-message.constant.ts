@@ -30,5 +30,25 @@ export default {
   DOCUMENT_NOT_FOUND: 'Document not found!',
   DOCUMENT_ACCESS_DENIED: 'You do not have access to this document!',
   ONLY_OWNER_CAN_UPDATE_DOCUMENT: 'Only the document owner can update the document!',
-  DOCUMENT_UPDATED: 'Document updated successfully!'
+  DOCUMENT_UPDATED: 'Document updated successfully!',
+
+  // Member messages
+  MEMBER_ALREADY_EXISTS: 'User is already a member of this document!',
+  MEMBER_NOT_FOUND: 'Member not found!',
+  MEMBER_INVITED: 'Member invited successfully!',
+  MEMBER_REMOVED: 'Member removed successfully!',
+  MEMBER_ROLE_UPDATED: 'Member role updated successfully!',
+  CANNOT_REMOVE_OWNER: 'Cannot remove the document owner!',
+  ONLY_OWNER_CAN_INVITE: 'Only the document owner can invite members!',
+  ONLY_OWNER_CAN_REMOVE: 'Only the document owner can remove members!',
+  ONLY_OWNER_CAN_UPDATE_ROLE: 'Only the document owner can update member roles!',
+  ONLY_OWNER_CAN_DELETE_DOCUMENT: 'Only the document owner can delete the document!',
+
+  //
+  INVITE_SENT: 'Invite sent successfully!',
+  INVITE_MAIL_FAILED: 'Failed to send invite email. Please try again!',
+  USER_NOT_REGISTERED: 'This email is not registered. Please ask them to register first!',
+
+  // Activity messages
+  ACTIVITY_FETCHED: 'Activity log fetched successfully!'
 };

@@ -8,6 +8,7 @@ import { generateUUID } from '../helpers/uuid.helper';
 
 // Importing models
 import documentModel from '../models/document.model';
+import activityLogModel from '../models/activity-log.model';
 import documentMemberModel from '../models/document-member.model';
 
 // Importing constants
@@ -55,6 +56,14 @@ const handleCreateDocument = async (req: Request, res: Response) => {
       invitedBy: req.userId!,
       invitedAt: new Date()
     });
+      
+    await activityLogModel.create({
+      logId: generateUUID(),
+      documentId,
+      userId: req.userId!,
+      action: 'joined',
+      timestamp: new Date()
+    });  
 
     return res.status(HttpStatusCode.Created).json({
       status: httpStatusConstant.CREATED,
