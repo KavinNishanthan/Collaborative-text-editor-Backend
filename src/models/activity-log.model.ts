@@ -4,11 +4,6 @@ import { Schema, model } from 'mongoose';
 // Importing interfaces
 import { IActivityLog } from '../interfaces/model.interface';
 
-/**
- * @createdBy Kavin Nishanthan P D
- * @createdAt 2026-04-02
- * @description Mongoose schema for document activity logs
- */
 
 const schema = new Schema<IActivityLog>(
   {

@@ -44,11 +44,6 @@ export default {
   ONLY_OWNER_CAN_UPDATE_ROLE: 'Only the document owner can update member roles!',
   ONLY_OWNER_CAN_DELETE_DOCUMENT: 'Only the document owner can delete the document!',
 
-  //
-  INVITE_SENT: 'Invite sent successfully!',
-  INVITE_MAIL_FAILED: 'Failed to send invite email. Please try again!',
-  USER_NOT_REGISTERED: 'This email is not registered. Please ask them to register first!',
-
   // Activity messages
   ACTIVITY_FETCHED: 'Activity log fetched successfully!',
 
@@ -57,5 +52,18 @@ export default {
   INVITATION_ALREADY_HANDLED: 'This invitation has already been handled!',
   INVITATION_ACCEPTED: 'Invitation accepted! Document added to your list.',
   INVITATION_DECLINED: 'Invitation declined.',
-  INVITATIONS_FETCHED: 'Pending invitations fetched successfully!'
+  INVITATIONS_FETCHED: 'Pending invitations fetched successfully!',
+
+  // Sharing messages
+  SHARE_LINK_GENERATED: 'Share link generated successfully!',
+  SHARE_LINK_INVALID: 'Invalid or expired share link!',
+  ALREADY_A_MEMBER: 'You are already a member of this document!',
+  JOINED_VIA_LINK: 'Joined document successfully!',
+  INVITE_SENT: 'Invite sent successfully!',
+  USER_NOT_REGISTERED: 'This email is not registered. Please ask them to register first!',
+  INVITE_MAIL_FAILED: 'Failed to send invite email. Please try again!',
+
+  // History messages
+  HISTORY_NOT_FOUND: 'No version history found!',
+  VERSION_RESTORED: 'Document version restored successfully!'
 };

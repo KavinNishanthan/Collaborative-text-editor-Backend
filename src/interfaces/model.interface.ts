@@ -36,10 +36,11 @@ interface IDocumentMember {
 }
 
 interface IDocumentHistory {
-  historyId?: string;
-  documentId?: string;
-  editedBy?: string;
+  historyId: string;
+  documentId: string;
+  editedBy: string;
   changes?: string;
+  content?: string;
   cursorPosition?: number;
   version?: number;
   timestamp?: Date;
