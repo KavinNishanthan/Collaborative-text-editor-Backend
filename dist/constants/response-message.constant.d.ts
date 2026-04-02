@@ -11,6 +11,7 @@ declare const _default: {
     USER_DELETED_SUCCESSFULLY: string;
     ACCOUNT_DEACTIVATED: string;
     SOMETHING_WENT_WRONG: string;
+    LOGIN_SUCCESS: string;
     OTP_SENT: string;
     OTP_VERIFIED: string;
     OTP_INVALID: string;

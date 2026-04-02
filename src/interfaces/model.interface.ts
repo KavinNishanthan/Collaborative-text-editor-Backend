@@ -53,4 +53,5 @@ interface IOtp {
   createdAt?: Date;
 }
 
+
 export {IUser, IDocument, IDocumentMember, IDocumentHistory, IOtp}

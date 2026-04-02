@@ -7,8 +7,11 @@ import authController from '../controllers/auth.controller';
 // Defining routers
 const router = Router();
 
-// Manual auth routes
+// Manual Register routes
 router.post('/register', authController.handleRegisterAndSendOtp);
 router.post('/verify/otp', authController.handleVerifyOtpAndRegister);
+
+// Manual Login routes
+router.get('/login', authController.handleLogin);
 
 export default router;

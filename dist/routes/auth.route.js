@@ -9,8 +9,10 @@ const express_1 = require("express");
 const auth_controller_1 = __importDefault(require("../controllers/auth.controller"));
 // Defining routers
 const router = (0, express_1.Router)();
-// Manual auth routes
+// Manual Register routes
 router.post('/register', auth_controller_1.default.handleRegisterAndSendOtp);
 router.post('/verify/otp', auth_controller_1.default.handleVerifyOtpAndRegister);
+// Manual Login routes
+router.get('/login', auth_controller_1.default.handleLogin);
 exports.default = router;
 //# sourceMappingURL=auth.route.js.map

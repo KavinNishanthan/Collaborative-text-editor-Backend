@@ -18,6 +18,7 @@ const user_model_1 = __importDefault(require("../models/user.model"));
 // Importing constants
 const http_message_constant_1 = __importDefault(require("../constants/http-message.constant"));
 const response_message_constant_1 = __importDefault(require("../constants/response-message.constant"));
+const cookie_helper_1 = require("../helpers/cookie.helper");
 /**
  * @createdBy Kavin Nishanthan P D
  * @createdAt 2026-04-01
@@ -145,7 +146,8 @@ const handleVerifyOtpAndRegister = async (req, res) => {
             email,
             password: value.password,
             isManualAuth: true,
-            profilePicture: `https://api.dicebear.com/7.x/initials/png?seed=${value.name}&backgroundColor=${(0, profile_colour_helper_1.generateColor)(value.name)}`
+            isEmailVerified: true,
+            profilePicture: `https://api.dicebear.com/7.x/initials/png?seed=${value.name.replace(/\s+/g, '')}&backgroundColor=${(0, profile_colour_helper_1.generateColor)(value.name)}`
         });
         await otp_model_1.default.deleteOne({ email });
         return res.status(axios_1.HttpStatusCode.Created).json({
@@ -161,5 +163,72 @@ const handleVerifyOtpAndRegister = async (req, res) => {
         });
     }
 };
-exports.default = { handleRegisterAndSendOtp, handleVerifyOtpAndRegister };
+/**
+ * @createdBy Kavin Nishanthan P D
+ * @createdAt 2026-04-02
+ * @description This function is used to handle user login
+ */
+const handleLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const loginValidation = joi_1.default.object({
+            email: joi_1.default.string().required(),
+            password: joi_1.default.string().required()
+        });
+        const { error } = loginValidation.validate(req.body);
+        if (error) {
+            return res.status(axios_1.HttpStatusCode.BadRequest).json({
+                status: http_message_constant_1.default.BAD_REQUEST,
+                code: axios_1.HttpStatusCode.BadRequest,
+                message: error.details[0]?.message.replace(/"/g, '')
+            });
+        }
+        const user = await user_model_1.default.findOne({ email }).select('+password');
+        if (!user) {
+            return res.status(axios_1.HttpStatusCode.NotFound).json({
+                status: http_message_constant_1.default.NOT_FOUND,
+                code: axios_1.HttpStatusCode.NotFound,
+                message: response_message_constant_1.default.USER_NOT_FOUND
+            });
+        }
+        if (!user.isManualAuth) {
+            return res.status(axios_1.HttpStatusCode.Unauthorized).json({
+                status: http_message_constant_1.default.UNAUTHORIZED,
+                code: axios_1.HttpStatusCode.Unauthorized,
+                message: response_message_constant_1.default.ACCOUNT_ASSOCIATED_WITH_GOOGLE
+            });
+        }
+        if (!user.isActive) {
+            return res.status(axios_1.HttpStatusCode.Forbidden).json({
+                status: http_message_constant_1.default.FORBIDDEN,
+                code: axios_1.HttpStatusCode.Forbidden,
+                message: response_message_constant_1.default.ACCOUNT_DEACTIVATED
+            });
+        }
+        const isPasswordValid = await bcryptjs_1.default.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(axios_1.HttpStatusCode.Unauthorized).json({
+                status: http_message_constant_1.default.UNAUTHORIZED,
+                code: axios_1.HttpStatusCode.Unauthorized,
+                message: response_message_constant_1.default.INVALID_CREDENTIALS
+            });
+        }
+        (0, cookie_helper_1.setAuthCookie)(res, user.userId, user.email);
+        const { password: _pwd, ...userData } = user.toObject();
+        return res.status(axios_1.HttpStatusCode.Ok).json({
+            status: http_message_constant_1.default.OK,
+            code: axios_1.HttpStatusCode.Ok,
+            message: response_message_constant_1.default.LOGIN_SUCCESS,
+            data: userData
+        });
+    }
+    catch (err) {
+        return res.status(axios_1.HttpStatusCode.InternalServerError).json({
+            status: http_message_constant_1.default.ERROR,
+            code: axios_1.HttpStatusCode.InternalServerError,
+            message: err?.message
+        });
+    }
+};
+exports.default = { handleRegisterAndSendOtp, handleVerifyOtpAndRegister, handleLogin };
 //# sourceMappingURL=auth.controller.js.map

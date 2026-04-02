@@ -17,6 +17,7 @@ import userModel from '../models/user.model';
 // Importing constants
 import httpStatusConstant from '../constants/http-message.constant';
 import responseMessageConstant from '../constants/response-message.constant';
+import { setAuthCookie } from '../helpers/cookie.helper';
 
 
 
@@ -175,7 +176,8 @@ const handleVerifyOtpAndRegister = async (req: Request, res: Response) => {
       email,
       password: value.password,
       isManualAuth: true,
-      profilePicture: `https://api.dicebear.com/7.x/initials/png?seed=${value.name}&backgroundColor=${generateColor(value.name)}`
+      isEmailVerified: true,
+      profilePicture: `https://api.dicebear.com/7.x/initials/png?seed=${value.name.replace(/\s+/g, '')}&backgroundColor=${generateColor(value.name)}`
     });
 
     await otpModel.deleteOne({ email });
@@ -195,4 +197,87 @@ const handleVerifyOtpAndRegister = async (req: Request, res: Response) => {
 };
 
 
-export default{ handleRegisterAndSendOtp, handleVerifyOtpAndRegister }
+/**
+ * @createdBy Kavin Nishanthan P D
+ * @createdAt 2026-04-01
+ * @description This function is used to handle user login
+ */
+
+
+const handleLogin = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    const loginValidation = Joi.object({
+    email: Joi.string().required(),
+    password: Joi.string().required()
+    });
+
+    const { error } = loginValidation.validate(req.body);
+
+    if (error) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: httpStatusConstant.BAD_REQUEST,
+        code: HttpStatusCode.BadRequest,
+        message: error.details[0]?.message.replace(/"/g, '')
+      });
+    }
+
+    const user = await userModel.findOne({ email }).select('+password');
+
+    if (!user) {
+      return res.status(HttpStatusCode.NotFound).json({
+        status: httpStatusConstant.NOT_FOUND,
+        code: HttpStatusCode.NotFound,
+        message: responseMessageConstant.USER_NOT_FOUND
+      });
+    }
+
+    if (!user.isManualAuth) {
+      return res.status(HttpStatusCode.Unauthorized).json({
+        status: httpStatusConstant.UNAUTHORIZED,
+        code: HttpStatusCode.Unauthorized,
+        message: responseMessageConstant.ACCOUNT_ASSOCIATED_WITH_GOOGLE
+      });
+    }
+
+    if (!user.isActive) {
+      return res.status(HttpStatusCode.Forbidden).json({
+        status: httpStatusConstant.FORBIDDEN,
+        code: HttpStatusCode.Forbidden,
+        message: responseMessageConstant.ACCOUNT_DEACTIVATED
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password as string);
+
+    if (!isPasswordValid) {
+      return res.status(HttpStatusCode.Unauthorized).json({
+        status: httpStatusConstant.UNAUTHORIZED,
+        code: HttpStatusCode.Unauthorized,
+        message: responseMessageConstant.INVALID_CREDENTIALS
+      });
+    }
+
+    setAuthCookie(res, user.userId!, user.email!);
+
+    const { password: _pwd, ...userData } = user.toObject();
+
+    return res.status(HttpStatusCode.Ok).json({
+      status: httpStatusConstant.OK,
+      code: HttpStatusCode.Ok,
+      message: responseMessageConstant.LOGIN_SUCCESS,
+      data: userData
+    });
+
+  } catch (err: any) {
+    return res.status(HttpStatusCode.InternalServerError).json({
+      status: httpStatusConstant.ERROR,
+      code: HttpStatusCode.InternalServerError,
+      message: err?.message 
+    });
+  }
+};
+
+
+export default{ handleRegisterAndSendOtp, handleVerifyOtpAndRegister ,handleLogin}

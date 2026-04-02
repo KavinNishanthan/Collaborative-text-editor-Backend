@@ -14,11 +14,12 @@ exports.default = {
     USER_DELETED_SUCCESSFULLY: 'User deleted successfully!',
     ACCOUNT_DEACTIVATED: 'Account has been deactivated!',
     SOMETHING_WENT_WRONG: 'Something went Wrong',
+    LOGIN_SUCCESS: 'Login Success',
     // OTP messages
     OTP_SENT: 'OTP sent to your email!',
     OTP_VERIFIED: 'OTP verified successfully!',
     OTP_INVALID: 'Invalid OTP!',
     OTP_EXPIRED: 'OTP has expired, Please request a new one!',
-    OTP_ALREADY_SENT: 'OTP already sent, Please check your email!',
+    OTP_ALREADY_SENT: 'OTP already sent, Please check your email!'
 };
 //# sourceMappingURL=response-message.constant.js.map
