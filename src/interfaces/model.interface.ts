@@ -14,10 +14,12 @@ interface IUser {
 }
 
 interface IDocument {
-  documentId?: string;
-  title?: string;
-  content?: string;
-  ownerId?: string;
+  documentId: string;
+  title: string;
+  content: string;
+  yjsState?: Buffer;
+  ownerId: string;
+  shareToken?: string;
   lastEditedBy?: string;
   lastEditedAt?: Date;
   createdAt?: Date;

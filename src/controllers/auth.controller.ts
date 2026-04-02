@@ -8,6 +8,7 @@ import { Request, Response } from 'express';
 import { generateOTP } from '../helpers/otp.helper';
 import { sendOtpMail } from '../helpers/mail.helper';
 import { generateUUID } from '../helpers/uuid.helper';
+import { setAuthCookie } from '../helpers/cookie.helper';
 import { generateColor } from '../helpers/profile-colour.helper';
 
 // Importing models
@@ -17,7 +18,6 @@ import userModel from '../models/user.model';
 // Importing constants
 import httpStatusConstant from '../constants/http-message.constant';
 import responseMessageConstant from '../constants/response-message.constant';
-import { setAuthCookie } from '../helpers/cookie.helper';
 
 
 
