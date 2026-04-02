@@ -64,5 +64,16 @@ interface IActivityLog {
   timestamp?: Date;
 }
 
+interface IInvitation {
+  invitationId: string;
+  documentId: string;
+  inviteeUserId: string;
+  invitedBy: string;
+  role: 'editor' | 'viewer';
+  status: 'pending' | 'accepted' | 'declined';
+  createdAt?: Date;
+}
 
-export { IUser, IDocument, IDocumentMember, IDocumentHistory, IOtp, IActivityLog };
+
+
+export { IUser, IDocument, IDocumentMember, IDocumentHistory, IOtp, IActivityLog, IInvitation };

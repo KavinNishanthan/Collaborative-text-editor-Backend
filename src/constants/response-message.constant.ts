@@ -50,5 +50,12 @@ export default {
   USER_NOT_REGISTERED: 'This email is not registered. Please ask them to register first!',
 
   // Activity messages
-  ACTIVITY_FETCHED: 'Activity log fetched successfully!'
+  ACTIVITY_FETCHED: 'Activity log fetched successfully!',
+
+  // Invitation messages
+  INVITATION_NOT_FOUND: 'Invitation not found!',
+  INVITATION_ALREADY_HANDLED: 'This invitation has already been handled!',
+  INVITATION_ACCEPTED: 'Invitation accepted! Document added to your list.',
+  INVITATION_DECLINED: 'Invitation declined.',
+  INVITATIONS_FETCHED: 'Pending invitations fetched successfully!'
 };

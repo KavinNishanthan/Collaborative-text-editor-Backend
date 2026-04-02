@@ -17,6 +17,7 @@ import documentMemberModel from '../models/document-member.model';
 // Importing constants
 import httpStatusConstant from '../constants/http-message.constant';
 import responseMessageConstant from '../constants/response-message.constant';
+import invitationModel from '../models/invitation.model';
 
 /**
  * @createdBy Kavin Nishanthan P D
@@ -113,6 +114,22 @@ const handleInviteMember = async (req: Request, res: Response) => {
       metadata: targetUser.userId!,
       timestamp: new Date()
     });
+
+    const existingInvitation = await invitationModel.findOne({
+      documentId,
+      inviteeUserId: targetUser.userId!,
+      status: 'pending'
+    });
+    if (!existingInvitation) {
+      await invitationModel.create({
+        invitationId: generateUUID(),
+        documentId,
+        inviteeUserId: targetUser.userId!,
+        invitedBy: req.userId!,
+        role: value.role,
+        status: 'pending'
+      });
+    }
 
     return res.status(HttpStatusCode.Ok).json({
       status: httpStatusConstant.OK,
