@@ -26,5 +26,9 @@ export default {
   OTP_ALREADY_SENT: 'OTP already sent, Please check your email!',
 
   // Document messages
-  DOCUMENT_CREATED: 'Document created successfully!'
+  DOCUMENT_CREATED: 'Document created successfully!',
+  DOCUMENT_NOT_FOUND: 'Document not found!',
+  DOCUMENT_ACCESS_DENIED: 'You do not have access to this document!',
+  ONLY_OWNER_CAN_UPDATE_DOCUMENT: 'Only the document owner can update the document!',
+  DOCUMENT_UPDATED: 'Document updated successfully!'
 };
