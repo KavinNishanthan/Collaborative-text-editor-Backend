@@ -15,7 +15,7 @@ router.post('/register', authController.handleRegisterAndSendOtp);
 router.post('/verify/otp', authController.handleVerifyOtpAndRegister);
 
 // Manual Login routes
-router.get('/login', authController.handleLogin);
+router.post('/login', authController.handleLogin);
 
 router.post('/logout', authMiddleware, (req, res) => {
   res.clearCookie('token', { httpOnly: true, secure: true, sameSite: 'strict' });
