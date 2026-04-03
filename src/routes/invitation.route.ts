@@ -14,9 +14,7 @@ router.use(authMiddleware);
 
 // Invitation routes 
 router.get('/', invitationController.handleGetPendingInvitations);
-
 router.post('/:invitationId/accept', invitationController.handleAcceptInvitation);
-
 router.post('/:invitationId/decline', invitationController.handleDeclineInvitation);
 
 export default router;

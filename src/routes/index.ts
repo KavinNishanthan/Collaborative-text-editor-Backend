@@ -9,6 +9,7 @@ import invitationRoute from './invitation.route';
 import historyRoute from './history.route';
 import sharingRoute from './sharing.route';
 import activityRoute from './activity.route';
+import commentRoute from './comment.route';
 
 
 // Defining router
@@ -24,6 +25,7 @@ router.use('/documents', memberRoute);
 router.use('/documents', historyRoute);
 router.use('/documents', sharingRoute);
 router.use('/documents', activityRoute);
+router.use('/documents', commentRoute);
 
 // Invitation inbox routes
 router.use('/invitations', invitationRoute);

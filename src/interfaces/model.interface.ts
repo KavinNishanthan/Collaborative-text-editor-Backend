@@ -75,6 +75,35 @@ interface IInvitation {
   createdAt?: Date;
 }
 
+interface ICommentReply {
+  replyId: string;
+  userId: string;
+  content: string;
+  createdAt?: Date;
+}
 
+interface IComment {
+  commentId: string;
+  documentId: string;
+  userId: string;
+  selectedText?: string;
+  rangeStart?: number;
+  rangeEnd?: number;
+  content: string;
+  isResolved?: boolean;
+  replies?: ICommentReply[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
-export { IUser, IDocument, IDocumentMember, IDocumentHistory, IOtp, IActivityLog, IInvitation };
+export {
+  IUser,
+  IDocument,
+  IDocumentMember,
+  IDocumentHistory,
+  IOtp,
+  IActivityLog,
+  IInvitation,
+  ICommentReply,
+  IComment
+};

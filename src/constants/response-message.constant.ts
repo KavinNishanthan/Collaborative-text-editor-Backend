@@ -65,5 +65,11 @@ export default {
 
   // History messages
   HISTORY_NOT_FOUND: 'No version history found!',
-  VERSION_RESTORED: 'Document version restored successfully!'
+  VERSION_RESTORED: 'Document version restored successfully!',
+
+  // Comment History
+  COMMENT_ADDED: 'Comment Added',
+  COMMENT_NOT_FOUND: 'Comment not Found',
+  REPLY_ADDED: 'Reply Added',
+  COMMENT_RESOLVED: 'Comment Resolved'
 };

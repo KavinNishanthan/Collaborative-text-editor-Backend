@@ -1,23 +1,24 @@
+// Importing Packages
 import jwt from 'jsonwebtoken';
 import * as Y from 'yjs';
 import { Server, Socket } from 'socket.io';
 import * as awarenessProtocol from 'y-protocols/awareness';
 
+// Importing Helper
 import { generateUUID } from '../helpers/uuid.helper';
 
+// Importing Models
 import documentModel from '../models/document.model';
 import documentHistoryModel from '../models/document-history.model';
 import activityLogModel from '../models/activity-log.model';
 import documentMemberModel from '../models/document-member.model';
 import userModel from '../models/user.model';
 
-
 /**
  * @createdBy Kavin Nishanthan P D
  * @createdAt 2026-04-03
  * @description Socket.IO configuration with Yjs CRDT, awareness, auto-save, throttled history, and activity logging
  */
-
 
 const docMap = new Map<string, Y.Doc>();
 const awarenessMap = new Map<string, awarenessProtocol.Awareness>();
@@ -27,7 +28,6 @@ const lastHistoryTime = new Map<string, number>();
 const SAVE_DEBOUNCE_MS = 3_000;
 const HISTORY_INTERVAL_MS = 10_000;
 
-
 /**
  * @createdBy Kavin Nishanthan P D
  * @createdAt 2026-04-03
@@ -35,7 +35,6 @@ const HISTORY_INTERVAL_MS = 10_000;
  * or creates a new one by loading the persisted Yjs state from the database.
  * Also initializes an Awareness instance for the document if not already present.
  */
-
 
 const getOrCreateYDoc = async (documentId: string): Promise<Y.Doc> => {
   if (docMap.has(documentId)) {
@@ -58,14 +57,12 @@ const getOrCreateYDoc = async (documentId: string): Promise<Y.Doc> => {
   return ydoc;
 };
 
-
 /**
  * @createdBy Kavin Nishanthan P D
  * @createdAt 2026-04-03
  * @description Extracts plain text content from a Y.Doc by first checking for an XmlFragment
  * under the key 'default', and falling back to a YText under the key 'content'.
  */
-
 
 const extractContent = (ydoc: Y.Doc): string => {
   const xmlFrag = ydoc.getXmlFragment('default');
@@ -80,7 +77,6 @@ const extractContent = (ydoc: Y.Doc): string => {
   return '';
 };
 
-
 /**
  * @createdBy Kavin Nishanthan P D
  * @createdAt 2026-04-03
@@ -88,7 +84,6 @@ const extractContent = (ydoc: Y.Doc): string => {
  * XmlText and XmlElement nodes. Appends newline characters after block-level elements
  * such as paragraphs, headings, blockquotes, and list items.
  */
-
 
 const extractTextFromXmlFragment = (fragment: Y.XmlFragment): string => {
   const parts: string[] = [];
@@ -107,7 +102,6 @@ const extractTextFromXmlFragment = (fragment: Y.XmlFragment): string => {
   return parts.join('').trim();
 };
 
-
 /**
  * @createdBy Kavin Nishanthan P D
  * @createdAt 2026-04-03
@@ -117,7 +111,6 @@ const extractTextFromXmlFragment = (fragment: Y.XmlFragment): string => {
  * elapsed since the last snapshot, also creates a versioned history entry and an activity log.
  * Emits 'saved' or 'error' status to the room once the save attempt completes.
  */
-
 
 const scheduleSave = (io: Server, documentId: string, ydoc: Y.Doc, userId: string) => {
   io.to(`doc:${documentId}`).emit('save-status', { status: 'saving' });
@@ -145,9 +138,7 @@ const scheduleSave = (io: Server, documentId: string, ydoc: Y.Doc, userId: strin
       const lastSnapshot = lastHistoryTime.get(documentId) || 0;
 
       if (now - lastSnapshot >= HISTORY_INTERVAL_MS) {
-        const latestHistory = await documentHistoryModel
-          .findOne({ documentId })
-          .sort({ version: -1 });
+        const latestHistory = await documentHistoryModel.findOne({ documentId }).sort({ version: -1 });
         const nextVersion = (latestHistory?.version || 0) + 1;
 
         await documentHistoryModel.create({
@@ -195,18 +186,18 @@ const parseToken = (socket: Socket): string | null => {
 
   const cookieHeader = socket.handshake.headers?.cookie || '';
   const tokenMatch = cookieHeader.split('; ').find((c: string) => c.startsWith('token='));
-  return tokenMatch ? tokenMatch.split('=')[1] ?? null : null;
+  return tokenMatch ? (tokenMatch.split('=')[1] ?? null) : null;
 };
 
-
 /**
+ * @createdBy Kavin Nishanthan P D
+ * @createdAt 2026-04-03
  * @description Registers Socket.IO middleware and event handlers for real-time collaborative
  * document editing. The middleware authenticates each connection using a JWT and attaches
  * user metadata to the socket. Supported events include join-document, sync-complete,
  * yjs-update, awareness-update, typing, and disconnect. Handles Yjs state synchronization,
  * awareness broadcasting, debounced auto-save, versioned history snapshots, and activity logging.
  */
-
 
 const socketConfig = (io: Server): void => {
   io.use(async (socket, next) => {
@@ -377,10 +368,7 @@ const socketConfig = (io: Server): void => {
               try {
                 const stateUpdate = Y.encodeStateAsUpdate(ydoc);
                 const content = extractContent(ydoc);
-                await documentModel.findOneAndUpdate(
-                  { documentId },
-                  { yjsState: Buffer.from(stateUpdate), content }
-                );
+                await documentModel.findOneAndUpdate({ documentId }, { yjsState: Buffer.from(stateUpdate), content });
               } catch (saveErr) {
                 console.error(`[Socket] Final save failed for doc ${documentId}:`, saveErr);
               }

@@ -2,8 +2,6 @@
 import mongoose from 'mongoose';
 
 
-
-
 const connect = async () => {
   try {
     mongoose.set('strictQuery', false);
