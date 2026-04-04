@@ -34,6 +34,7 @@ install_dependencies:
 build_typescript:
   stage: build
   image: $NODE_IMAGE
+  dependencies: []
   script:
     - npm ci
     - npm install -g typescript
