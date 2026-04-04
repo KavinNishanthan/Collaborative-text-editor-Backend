@@ -97,6 +97,9 @@ deploy_to_ec2:
           -e CLIENT_URL='$CLIENT_URL' \
           -e SMTP_MAIL='$SMTP_MAIL' \
           -e SMTP_PASSWORD='$SMTP_PASSWORD' \
+          -e GOOGLE_CLIENT_ID='$GOOGLE_CLIENT_ID' \
+          -e GOOGLE_CLIENT_SECRET='$GOOGLE_CLIENT_SECRET' \
+          -e GOOGLE_CALLBACK_URL='$GOOGLE_CALLBACK_URL' \
           $IMAGE_NAME:$IMAGE_TAG
         docker image prune -f
       "
