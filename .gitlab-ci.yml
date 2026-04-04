@@ -39,6 +39,7 @@ build_typescript:
   dependencies:
     - install_dependencies
   script:
+    - ls node_modules/.bin/ | grep tsc   # debug line
     - npm run build
   artifacts:
     paths:
