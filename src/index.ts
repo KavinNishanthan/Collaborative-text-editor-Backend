@@ -35,7 +35,7 @@ socketConfig(io);
 
 app.use(
   cors({
-    origin: corsOrigins,
+    origin: [...corsOrigins, 'http://localhost:5173'],
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
     credentials: true
   })
