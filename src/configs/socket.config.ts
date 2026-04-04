@@ -296,10 +296,18 @@ const socketConfig = (io: Server): void => {
         const ydoc = docMap.get(documentId);
         if (!ydoc) return;
 
-        const uint8Update = new Uint8Array(update);
-        Y.applyUpdate(ydoc, uint8Update);
+        const clientUpdate = new Uint8Array(update);
 
-        socket.to(`doc:${documentId}`).emit('yjs-update', update);
+        // Only apply updates the server doesn't already have.
+        // We compute a diff: what does the client know that the server doesn't?
+        // This prevents a client with empty/stale state from overwriting the server's content.
+        const serverStateVector = Y.encodeStateVector(ydoc);
+        const serverMissingUpdates = Y.diffUpdate(clientUpdate, serverStateVector);
+
+        if (serverMissingUpdates.byteLength > 0) {
+          Y.applyUpdate(ydoc, serverMissingUpdates);
+          socket.to(`doc:${documentId}`).emit('yjs-update', serverMissingUpdates.buffer);
+        }
       } catch (err) {
         console.error('[Socket] sync-complete error:', err);
       }
