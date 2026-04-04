@@ -314,6 +314,19 @@ See [`.gitlab-ci.yml`](.gitlab-ci.yml) for full pipeline configuration.
 
 ---
 
+## Deployment
+
+The project is deployed using a production-ready DevOps pipeline:
+
+- **AWS:** Frontend and backend services are hosted on AWS
+- **Docker:** Application services are containerized for consistency across development and production environments  
+- **GitLab CI/CD:** Automated pipelines handle build, testing, and deployment processes  
+- **Version Control:** Git-based workflow integrated with GitLab for seamless collaboration and deployment  
+
+This architecture enables efficient delivery, reproducibility, and streamlined deployments.
+
+---
+
 ## AI Tools Used
 
 | Tool                 |                                                                                       
