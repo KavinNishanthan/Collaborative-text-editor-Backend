@@ -31,6 +31,7 @@ export default {
   DOCUMENT_ACCESS_DENIED: 'You do not have access to this document!',
   ONLY_OWNER_CAN_UPDATE_DOCUMENT: 'Only the document owner can update the document!',
   DOCUMENT_UPDATED: 'Document updated successfully!',
+  DOCUMENT_DELETED: 'Document Deletd',
 
   // Member messages
   MEMBER_ALREADY_EXISTS: 'User is already a member of this document!',

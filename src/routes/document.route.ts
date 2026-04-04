@@ -18,6 +18,7 @@ router.post('/', documentController.handleCreateDocument);
 router.get('/', documentController.handleGetAllDocuments);
 router.get('/:documentId', documentController.handleGetDocumentById);
 router.put('/:documentId', documentController.handleUpdateDocument);
+router.delete('/:documentId', documentController.handleDeleteDocument);
 
 
 export default router;

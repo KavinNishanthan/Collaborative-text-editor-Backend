@@ -14,6 +14,8 @@ import documentMemberModel from '../models/document-member.model';
 // Importing constants
 import httpStatusConstant from '../constants/http-message.constant';
 import responseMessageConstant from '../constants/response-message.constant';
+import documentHistoryModel from '../models/document-history.model';
+import commentModel from '../models/comment.model';
 
 
 /**
@@ -229,7 +231,59 @@ const handleGetDocumentById = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @createdBy Kavin Nishanthan P D
+ * @createdAt 2026-04-04
+ * @description This function is used to delete a document and all related data (owner only)
+ */
+
+const handleDeleteDocument = async (req: Request, res: Response) => {
+  try {
+    const { documentId } = req.params as { documentId: string };
+
+    const ownerMembership = await documentMemberModel.findOne({
+      documentId,
+      userId: req.userId,
+      role: 'owner'
+    });
+
+    if (!ownerMembership) {
+      return res.status(HttpStatusCode.Forbidden).json({
+        status: httpStatusConstant.FORBIDDEN,
+        code: HttpStatusCode.Forbidden,
+        message: responseMessageConstant.ONLY_OWNER_CAN_DELETE_DOCUMENT
+      });
+    }
+
+    await Promise.all([
+      documentModel.deleteOne({ documentId }),
+      documentMemberModel.deleteMany({ documentId }),
+      documentHistoryModel.deleteMany({ documentId }),
+      commentModel.deleteMany({ documentId }),
+      activityLogModel.deleteMany({ documentId })
+    ]);
+
+    return res.status(HttpStatusCode.Ok).json({
+      status: httpStatusConstant.OK,
+      code: HttpStatusCode.Ok,
+      message: responseMessageConstant.DOCUMENT_DELETED
+    });
+  } catch (err: any) {
+    return res.status(HttpStatusCode.InternalServerError).json({
+      status: httpStatusConstant.ERROR,
+      code: HttpStatusCode.InternalServerError,
+      message: responseMessageConstant.SOMETHING_WENT_WRONG
+    });
+  }
+};
 
 
 
-export default { handleCreateDocument ,handleUpdateDocument , handleGetAllDocuments, handleGetDocumentById};
+
+export default {
+  handleCreateDocument,
+  handleUpdateDocument,
+  handleGetAllDocuments,
+  handleGetDocumentById,
+  handleDeleteDocument
+};
