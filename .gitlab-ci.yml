@@ -49,7 +49,9 @@ docker_build_push:
   services:
     - docker:24-dind
   needs:
-    - build_typescript
+    - build_app
+  dependencies:
+    - build_app
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
