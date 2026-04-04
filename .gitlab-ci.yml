@@ -15,6 +15,7 @@ variables:
   HOST_PORT: 8080
   CONTAINER_PORT: 8080
 
+
 install_dependencies:
   stage: install
   image: $NODE_IMAGE
