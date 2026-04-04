@@ -12,18 +12,12 @@ import { Response } from 'express';
  */
 
 const setAuthCookie = (res: Response, userId: string, email: string): void => {
-  const isProd = process.env.NODE_ENV === 'production';
-
-  const token = jwt.sign(
-    { userId, email },
-    process.env.JWT_SECRET as string,
-    { expiresIn: '7d' }
-  );
+  const token = jwt.sign({ userId, email }, process.env.JWT_SECRET as string, { expiresIn: '7d' });
 
   res.cookie('token', token, {
     httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? 'none' : 'lax',
+    sameSite: 'none',
+    secure: false,
     maxAge: 7 * 24 * 60 * 60 * 1000
   });
 };
