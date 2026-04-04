@@ -35,6 +35,8 @@ build_typescript:
   stage: build
   image: $NODE_IMAGE
   dependencies: []
+  variables:
+    NODE_ENV: development
   script:
     - npm ci --include=dev
     - npm install -g typescript
