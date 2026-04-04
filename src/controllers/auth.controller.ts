@@ -47,11 +47,21 @@ const handleRegisterAndSendOtp = async (req: Request, res: Response) => {
       });
     }
 
-    const checkIsUserExists = await userModel
-      .findOne({ email })
-      .select('email -_id');
+    const existingUser = await userModel.findOne({ email });
 
-    if (checkIsUserExists) {
+    if (existingUser && !existingUser.isManualAuth) {
+      return res.status(HttpStatusCode.Ok).json({
+        status: httpStatusConstant.OK,
+        code: HttpStatusCode.Ok,
+        message: responseMessageConstant.ACCOUNT_ASSOCIATED_WITH_GOOGLE,
+        userId: existingUser.userId,
+        email: existingUser.email,
+        name: existingUser.name,
+        profilePicture: existingUser.profilePicture
+      });
+    }
+
+    if (existingUser) {
       return res.status(HttpStatusCode.Conflict).json({
         status: httpStatusConstant.CONFLICT,
         code: HttpStatusCode.Conflict,
@@ -280,4 +290,126 @@ const handleLogin = async (req: Request, res: Response) => {
 };
 
 
-export default{ handleRegisterAndSendOtp, handleVerifyOtpAndRegister ,handleLogin}
+/**
+ * @createdBy Kavin Nishanthan P D
+ * @createdAt 2026-04-04
+ * @description Redirects the user to Google's OAuth 2.0 consent screen
+ */
+const handleGoogleRedirect = (_req: Request, res: Response) => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const redirectUri = process.env.GOOGLE_CALLBACK_URL;
+
+  if (!clientId || !redirectUri) {
+    return res.status(HttpStatusCode.InternalServerError).json({
+      status: httpStatusConstant.ERROR,
+      code: HttpStatusCode.InternalServerError,
+      message: 'Google OAuth is not configured on the server.'
+    });
+  }
+
+  const params = new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: redirectUri,
+    response_type: 'code',
+    scope: 'openid email profile',
+    access_type: 'offline',
+    prompt: 'consent'
+  });
+
+  return res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`);
+};
+
+
+/**
+ * @createdBy Kavin Nishanthan P D
+ * @createdAt 2026-04-04
+ * @description Handles the Google OAuth callback – exchanges code for tokens, finds/creates user, sets cookie, redirects to frontend
+ */
+const handleGoogleCallback = async (req: Request, res: Response) => {
+  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+
+  try {
+    const { code } = req.query;
+
+    if (!code || typeof code !== 'string') {
+      return res.redirect(`${clientUrl}/login?error=google_auth_failed`);
+    }
+
+    // Exchange code for tokens
+    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code,
+        client_id: process.env.GOOGLE_CLIENT_ID as string,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET as string,
+        redirect_uri: process.env.GOOGLE_CALLBACK_URL as string,
+        grant_type: 'authorization_code'
+      }).toString()
+    });
+
+    const tokenData = await tokenResponse.json() as any;
+
+    if (!tokenData.access_token) {
+      return res.redirect(`${clientUrl}/login?error=google_auth_failed`);
+    }
+
+    // Get user info from Google
+    const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` }
+    });
+
+    const googleUser = await userInfoResponse.json() as any;
+
+    if (!googleUser.email) {
+      return res.redirect(`${clientUrl}/login?error=google_auth_failed`);
+    }
+
+    // Check if user already exists
+    let user = await userModel.findOne({ email: googleUser.email });
+
+    if (user && user.isManualAuth) {
+      return res.redirect(`${clientUrl}/login?error=user_already_exists`);
+    }
+
+    if (user) {
+      // Update google ID if not set
+      if (!user.googleId) {
+        user.googleId = googleUser.id;
+        await user.save();
+      }
+    } else {
+      // Create new user
+      const generatedUserId = generateUUID();
+      user = await userModel.create({
+        userId: generatedUserId,
+        name: googleUser.name || googleUser.email.split('@')[0],
+        email: googleUser.email,
+        googleId: googleUser.id,
+        isManualAuth: false,
+        isEmailVerified: true,
+        isActive: true,
+        profilePicture: googleUser.picture || `https://api.dicebear.com/7.x/initials/png?seed=${(googleUser.name || 'U').replace(/\s+/g, '')}&backgroundColor=${generateColor(googleUser.name || 'U')}`
+      });
+    }
+
+    // Set auth cookie
+    setAuthCookie(res, user.userId!, user.email!);
+
+    // Redirect to frontend with user data
+    const params = new URLSearchParams({
+      userId: user.userId!,
+      name: user.name!,
+      email: user.email!
+    });
+
+    return res.redirect(`${clientUrl}/auth/google/success?${params.toString()}`);
+
+  } catch (err: any) {
+    console.error('Google OAuth error:', err.message);
+    return res.redirect(`${clientUrl}/login?error=google_auth_failed`);
+  }
+};
+
+
+export default { handleRegisterAndSendOtp, handleVerifyOtpAndRegister, handleLogin, handleGoogleRedirect, handleGoogleCallback }

@@ -72,5 +72,8 @@ export default {
   COMMENT_ADDED: 'Comment Added',
   COMMENT_NOT_FOUND: 'Comment not Found',
   REPLY_ADDED: 'Reply Added',
-  COMMENT_RESOLVED: 'Comment Resolved'
+  COMMENT_RESOLVED: 'Comment Resolved',
+
+  // Google OAuth
+  GOOGLE_AUTH_FAILED: 'Google authentication failed. Please try again.'
 };

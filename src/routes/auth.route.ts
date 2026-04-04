@@ -17,6 +17,11 @@ router.post('/verify/otp', authController.handleVerifyOtpAndRegister);
 // Manual Login routes
 router.post('/login', authController.handleLogin);
 
+
+// Google OAuth routes
+router.get('/google', authController.handleGoogleRedirect);
+router.get('/google/callback', authController.handleGoogleCallback);
+
 router.post('/logout', authMiddleware, (req, res) => {
   const isProd = process.env.NODE_ENV === 'production';
   res.clearCookie('token', {
