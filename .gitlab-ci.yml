@@ -34,8 +34,11 @@ install_dependencies:
 build_typescript:
   stage: build
   image: $NODE_IMAGE
+  needs:
+    - install_dependencies
+  dependencies:
+    - install_dependencies
   script:
-    - npm ci
     - npm run build
   artifacts:
     paths:
