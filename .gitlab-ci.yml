@@ -34,18 +34,14 @@ install_dependencies:
 build_typescript:
   stage: build
   image: $NODE_IMAGE
-  needs:
-    - install_dependencies
-  dependencies:
-    - install_dependencies
   script:
-    - ls node_modules/.bin/ | grep tsc   # debug line
+    - npm ci
     - npm run build
   artifacts:
     paths:
       - dist/
     expire_in: 1 hour
-
+    
 docker_build_push:
   stage: docker
   image: docker:24
