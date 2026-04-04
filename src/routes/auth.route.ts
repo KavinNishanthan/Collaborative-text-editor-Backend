@@ -18,7 +18,12 @@ router.post('/verify/otp', authController.handleVerifyOtpAndRegister);
 router.post('/login', authController.handleLogin);
 
 router.post('/logout', authMiddleware, (req, res) => {
-  res.clearCookie('token', { httpOnly: true, secure: true, sameSite: 'strict' });
+  const isProd = process.env.NODE_ENV === 'production';
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax'
+  });
   res.status(200).json({ status: 'Ok', code: 200, message: 'Logged out successfully!' });
 });
 
