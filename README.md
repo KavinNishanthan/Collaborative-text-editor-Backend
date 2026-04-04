@@ -22,6 +22,7 @@ Live App: --> [http://16.176.171.124/login](http://16.176.171.124/login)
 - [Deployment](#deployment)
 - [AI Tools Used](#ai-tools-used)
 - [Known Limitations](#known-limitations)
+- [Deployment(DevOps)](#deployment)
 
 ---
 
