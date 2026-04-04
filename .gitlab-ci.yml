@@ -36,7 +36,7 @@ build_typescript:
   image: $NODE_IMAGE
   dependencies: []
   script:
-    - npm ci
+    - npm ci --include=dev
     - npm install -g typescript
     - npm run build
   artifacts:
