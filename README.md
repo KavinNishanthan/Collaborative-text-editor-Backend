@@ -5,7 +5,7 @@ A real-time collaborative text editor backend where multiple users can edit the 
 ---
 
 # Live URL 
-Live App:** [http://16.176.171.124/login](http://16.176.171.124/login) -->
+Live App: --> [http://16.176.171.124/login](http://16.176.171.124/login)
 
 ---
 
